@@ -1,4 +1,4 @@
-import orbit2vec
+import Orbit2Vec.orbit2vec as orbit2vec
 import torch
 
 #testing
