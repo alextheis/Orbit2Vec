@@ -1,5 +1,6 @@
 import unittest 
 import torch
+import math
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -41,34 +42,28 @@ class TestMaps(unittest.TestCase):
         self.assertAlmostEqual(self.orbit2vec_instance.map2(list=v3), self.orbit2vec_instance.map2(list=neg_v3))
 
     def test_map3(self):
+        
+        ortho = torch.tensor([[math.cos(math.pi), math.sin(math.pi)],[math.sin(math.pi), -math.cos(math.pi)]], dtype=torch.float32)
 
         v1 = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=torch.float32)
-        neg_v1 = v1 * -1
-
         v2 = torch.tensor([[1, 1, 1], [2, 2, 2], [3, 3, 3]], dtype=torch.float32)
-        neg_v2 = v2 * -1
-
         v3 = torch.tensor([[3, 1, 2], [2, 7, 0], [1, 0, 1]], dtype=torch.float32)
-        neg_v3 = v3 * -1
 
-        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v1), self.orbit2vec_instance.map3(matrix=neg_v1))
-        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v2), self.orbit2vec_instance.map3(matrix=neg_v2))
-        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v3), self.orbit2vec_instance.map3(matrix=neg_v3))
+        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v1), self.orbit2vec_instance.map3(matrix=ortho))
+        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v2), self.orbit2vec_instance.map3(matrix=ortho))
+        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v3), self.orbit2vec_instance.map3(matrix=ortho))
 
     def test_map4(self):
 
+        ortho = torch.tensor([[math.cos(math.pi), math.sin(math.pi)],[math.sin(math.pi), -math.cos(math.pi)]], dtype=torch.float32)
+
         v1 = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=torch.float32)
-        neg_v1 = v1 * -1
-
         v2 = torch.tensor([[1, 1, 1], [2, 2, 2], [3, 3, 3]], dtype=torch.float32)
-        neg_v2 = v2 * -1
-
         v3 = torch.tensor([[3, 1, 2], [2, 7, 0], [1, 0, 1]], dtype=torch.float32)
-        neg_v3 = v3 * -1
 
-        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v1), self.orbit2vec_instance.map4(matrix=neg_v1))
-        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v2), self.orbit2vec_instance.map4(matrix=neg_v2))
-        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v3), self.orbit2vec_instance.map4(matrix=neg_v3))
+        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v1), self.orbit2vec_instance.map4(matrix=ortho))
+        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v2), self.orbit2vec_instance.map4(matrix=ortho))
+        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v3), self.orbit2vec_instance.map4(matrix=ortho))
     
 if __name__ == '__main__':
     unittest.main()
