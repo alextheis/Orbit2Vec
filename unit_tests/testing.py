@@ -49,9 +49,9 @@ class TestMaps(unittest.TestCase):
         v2 = torch.tensor([[3, 3], [4,4]], dtype=torch.float32)
         v3 = torch.tensor([[1, 0], [7,4]], dtype=torch.float32)
 
-        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v1), self.orbit2vec_instance.map3(matrix=(v1 @ ortho)))
-        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v2), self.orbit2vec_instance.map3(matrix=(v2 @ ortho)))
-        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v3), self.orbit2vec_instance.map3(matrix=(v3 @ ortho)))
+        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v1), self.orbit2vec_instance.map3(matrix=(ortho.T @ v1 @ ortho)))
+        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v2), self.orbit2vec_instance.map3(matrix=(ortho.T @ v2 @ ortho)))
+        torch.testing.assert_close(self.orbit2vec_instance.map3(matrix=v3), self.orbit2vec_instance.map3(matrix=(ortho.T @ v3 @ ortho)))
 
     def test_map4(self):
 
@@ -61,9 +61,9 @@ class TestMaps(unittest.TestCase):
         v2 = torch.tensor([[3, 3], [4,4]], dtype=torch.float32)
         v3 = torch.tensor([[1, 0], [7,4]], dtype=torch.float32)
 
-        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v1), self.orbit2vec_instance.map4(matrix=(v1 @ ortho)))
-        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v2), self.orbit2vec_instance.map4(matrix=(v2 @ ortho)))
-        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v3), self.orbit2vec_instance.map4(matrix=(v3 @ ortho)))
+        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v1), self.orbit2vec_instance.map4(matrix=(ortho.T @ v1 @ ortho)))
+        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v2), self.orbit2vec_instance.map4(matrix=(ortho.T @ v2 @ ortho)))
+        torch.testing.assert_close(self.orbit2vec_instance.map4(matrix=v3), self.orbit2vec_instance.map4(matrix=(ortho.T @ v3 @ ortho)))
     
 if __name__ == '__main__':
     unittest.main()
