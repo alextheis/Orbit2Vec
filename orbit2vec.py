@@ -32,7 +32,8 @@ class orbit2vec:
     #map2 function
     def map2(self, list):
         #sorts list
-        return list.sort
+        list.sort()
+        return list
     
     #map3 function
     def map3(self, matrix):
