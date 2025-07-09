@@ -69,31 +69,37 @@ class orbit2vec:
         list.sort()
         return list
     
-    #map3 function
+    # #map3 function
+    # def map3(self, matrix):
+    #     #calculates the eigenvalues and the "S" matrix, takes the transpose of "S" (St)  
+    #     eigenvalues, eigenvectors = torch.linalg.eigh(matrix)
+    #     transposed_eigenvectors = eigenvectors.T
+
+    #     #creates the diagonal "D" matrix, takes sqrt of said matrix
+    #     diagonal_eigenvalues = torch.diag_embed(eigenvalues)
+    #     sqrt_matrix = self.matrix_sqrt_sym(diagonal_eigenvalues)
+
+    #     #returns S*sqrt(D)*St
+    #     return (eigenvectors @ sqrt_matrix) @ transposed_eigenvectors
     def map3(self, matrix):
-        #calculates the eigenvalues and the "S" matrix, takes the transpose of "S" (St)  
-        eigenvalues, eigenvectors = torch.linalg.eigh(matrix)
-        transposed_eigenvectors = eigenvectors.T
-
-        #creates the diagonal "D" matrix, takes sqrt of said matrix
-        diagonal_eigenvalues = torch.diag_embed(eigenvalues)
-        sqrt_matrix = self.matrix_sqrt_sym(diagonal_eigenvalues)
-
-        #returns S*D*St
-        return (eigenvectors @ sqrt_matrix) @ transposed_eigenvectors
+        return self.matrix_sqrt_sym(matrix.t @ matrix)
 
     # #map4 function
     # def map4(self, matrix):
     #     #centers the matrix by shifting it by the avg value
-    #     avg = torch.mean(matrix)
+    #     avg = torch.mean(matrix, axis=1)
 
     #     #pass through map3 after being centered 
     #     return self.map3(matrix + avg)
 
     def map4(self, matrix):
-        avg = torch.trace(matrix) / matrix.shape[0]
-        shifted_matrix = matrix + avg * torch.eye(matrix.shape[0], dtype=matrix.dtype, device=matrix.device)
-        return self.map3(shifted_matrix)
+        # Compute the average of each column (dim=0 means over rows)
+        column_avg = matrix.mean(dim=0)  # shape: (num_columns,)
+        
+        # Add the column_avg to each row (broadcast over rows)
+        centered_matrix = matrix + column_avg  # shape: (num_rows, num_columns)
+        
+        return self.map3(centered_matrix)
 
         
 
