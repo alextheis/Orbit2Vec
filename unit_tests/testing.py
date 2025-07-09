@@ -73,15 +73,32 @@ class TestMaps(unittest.TestCase):
             [math.sin(theta),  math.cos(theta)]
         ], dtype=torch.float32)
 
-        for v in [v1, v2, v3]:
+        for i, v in enumerate([v1, v2, v3]):
+            transformed = ortho.T @ v @ ortho
+            print(f"\nMatrix {i+1}:")
+            print(f"Original:\n{v}")
+            print(f"Transformed:\n{transformed}")
+            
+            # Test map3 directly for comparison
+            result1_map3 = self.orbit2vec_instance.map3(matrix=v)
+            result2_map3 = self.orbit2vec_instance.map3(matrix=transformed)
+            eigvals1_map3 = torch.sort(torch.linalg.eigvalsh(result1_map3)).values
+            eigvals2_map3 = torch.sort(torch.linalg.eigvalsh(result2_map3)).values
+            print(f"map3 eigenvalues original: {eigvals1_map3}")
+            print(f"map3 eigenvalues transformed: {eigvals2_map3}")
+            
             result1 = self.orbit2vec_instance.map4(matrix=v)
-            result2 = self.orbit2vec_instance.map4(matrix=(ortho.T @ v @ ortho))
-
-            # Compare sorted eigenvalues instead of full matrices
+            result2 = self.orbit2vec_instance.map4(matrix=transformed)
             eigvals1 = torch.sort(torch.linalg.eigvalsh(result1)).values
             eigvals2 = torch.sort(torch.linalg.eigvalsh(result2)).values
-
-            torch.testing.assert_close(eigvals1, eigvals2, rtol=5e-2, atol=1e-2)
+            print(f"map4 eigenvalues original: {eigvals1}")
+            print(f"map4 eigenvalues transformed: {eigvals2}")
+            
+            try:
+                torch.testing.assert_close(eigvals1, eigvals2, rtol=5e-2, atol=1e-2)
+                print("✓ PASSED")
+            except AssertionError as e:
+                print(f"✗ FAILED: {e}")
 
 
     

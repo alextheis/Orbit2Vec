@@ -82,7 +82,7 @@ class orbit2vec:
     #     #returns S*sqrt(D)*St
     #     return (eigenvectors @ sqrt_matrix) @ transposed_eigenvectors
     def map3(self, matrix):
-        return self.matrix_sqrt_sym(matrix.t @ matrix)
+        return self.matrix_sqrt_sym(matrix.t() @ matrix)
 
     # #map4 function
     # def map4(self, matrix):
@@ -92,14 +92,21 @@ class orbit2vec:
     #     #pass through map3 after being centered 
     #     return self.map3(matrix + avg)
 
-    def map4(self, matrix):
-        # Compute the average of each column (dim=0 means over rows)
-        column_avg = matrix.mean(dim=0)  # shape: (num_columns,)
+    # def map4(self, matrix):
+    #     # Compute the average of each column (dim=0 means over rows)
+    #     column_avg = matrix.mean(dim=0)  # shape: (num_columns,)
         
-        # Add the column_avg to each row (broadcast over rows)
-        centered_matrix = matrix + column_avg  # shape: (num_rows, num_columns)
+    #     # Subtract the mean from each column (broadcast over rows)
+    #     centered_matrix = matrix - column_avg  # shape: (num_rows, num_columns)
         
-        return self.map3(centered_matrix)
+    #     return self.map3(centered_matrix)
 
+    def map4(self, matrix):
+        # Instead of centering columns, make the matrix have zero trace
+        # This is invariant under similarity transformations
+        n = matrix.shape[0]
+        trace_centered = matrix - (matrix.trace() / n) * torch.eye(n)
         
+        return self.map3(trace_centered)
+                    
 
