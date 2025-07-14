@@ -69,44 +69,32 @@ class orbit2vec:
         list.sort()
         return list
     
-    # #map3 function
-    # def map3(self, matrix):
-    #     #calculates the eigenvalues and the "S" matrix, takes the transpose of "S" (St)  
-    #     eigenvalues, eigenvectors = torch.linalg.eigh(matrix)
-    #     transposed_eigenvectors = eigenvectors.T
-
-    #     #creates the diagonal "D" matrix, takes sqrt of said matrix
-    #     diagonal_eigenvalues = torch.diag_embed(eigenvalues)
-    #     sqrt_matrix = self.matrix_sqrt_sym(diagonal_eigenvalues)
-
-    #     #returns S*sqrt(D)*St
-    #     return (eigenvectors @ sqrt_matrix) @ transposed_eigenvectors
     def map3(self, matrix):
         return self.matrix_sqrt_sym(matrix.t() @ matrix)
 
-    # #map4 function
     # def map4(self, matrix):
-    #     #centers the matrix by shifting it by the avg value
-    #     avg = torch.mean(matrix, axis=1)
-
-    #     #pass through map3 after being centered 
-    #     return self.map3(matrix + avg)
-
-    # def map4(self, matrix):
-    #     # Compute the average of each column (dim=0 means over rows)
-    #     column_avg = matrix.mean(dim=0)  # shape: (num_columns,)
+    #     # Instead of centering columns, make the matrix have zero trace
+    #     # This is invariant under similarity transformations
+    #     n = matrix.shape[0]
+    #     trace_centered = matrix - (matrix.trace() / n) * torch.eye(n)
         
-    #     # Subtract the mean from each column (broadcast over rows)
-    #     centered_matrix = matrix - column_avg  # shape: (num_rows, num_columns)
-        
-    #     return self.map3(centered_matrix)
-
-    def map4(self, matrix):
-        # Instead of centering columns, make the matrix have zero trace
-        # This is invariant under similarity transformations
-        n = matrix.shape[0]
-        trace_centered = matrix - (matrix.trace() / n) * torch.eye(n)
-        
-        return self.map3(trace_centered)
+    #     return self.map3(trace_centered)
                     
+    def map4(self, matrix):
+        num_columns = matrix.shape[1]
+        column_length = matrix.shape[0]
+        col_sum = torch.zeros(column_length, 1)
 
+        for i in range(num_columns):
+            column = matrix[:, i]  # shape: (column_length,)
+            col_sum += column.unsqueeze(1)  # shape: (column_length, 1)
+
+        col_avg = col_sum / num_columns
+
+        for i in range(num_columns):
+            matrix[:, i] = matrix[:, i] - col_avg.squeeze(1)  # match dimensions
+
+        return self.map3(matrix)
+
+
+    

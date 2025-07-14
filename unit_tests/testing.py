@@ -74,7 +74,7 @@ class TestMaps(unittest.TestCase):
         ], dtype=torch.float32)
 
         for i, v in enumerate([v1, v2, v3]):
-            transformed = ortho.T @ v @ ortho
+            transformed = ortho @ v
             print(f"\nMatrix {i+1}:")
             print(f"Original:\n{v}")
             print(f"Transformed:\n{transformed}")
