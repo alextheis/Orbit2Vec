@@ -96,5 +96,19 @@ class orbit2vec:
 
         return self.map3(matrix)
 
+    def max_inner_product(self, x: torch.Tensor, y: torch.Tensor, group: list):
+        """
+        Compute max_{g ∈ G} ⟨x, g(y)⟩ where G is a group of isometries represented by matrices.
+
+        Args:
+            x: Tensor of shape (n,)
+            y: Tensor of shape (n,)
+            group: List of tensors, each of shape (n, n), representing isometries.
+
+        Returns:
+            Scalar tensor: the maximum inner product.
+        """
+        inner_products = [torch.dot(x, g @ y) for g in group]
+        return torch.max(torch.stack(inner_products))
 
     
