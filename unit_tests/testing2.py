@@ -1,37 +1,55 @@
 import unittest
 import torch
-import math
-import sys
-import os
+from math import pi, cos, sin
+from group import from_matrices
 
-# Add parent directory to path to import orbit2vec
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from orbit2vec import orbit2vec
 
-class TestMaxInnerProduct(unittest.TestCase):
+# Helper to define a 2D rotation matrix
+def rotation_matrix(theta):
+    return torch.tensor([
+        [cos(theta), -sin(theta)],
+        [sin(theta),  cos(theta)]
+    ], dtype=torch.float32)
+
+class TestFromMatrices(unittest.TestCase):
+
     def setUp(self):
-        self.model = orbit2vec()
+        # Define group elements (isometries)
+        self.identity = torch.eye(2)
+        self.rotation_90 = rotation_matrix(pi / 2)
+        self.reflection_x = torch.tensor([[1.0, 0.0], [0.0, -1.0]])
+        self.group_elements = [self.identity, self.rotation_90, self.reflection_x]
 
-    def test_rotation_group(self):
-        # Define test vectors
-        x = torch.tensor([1.0, 0.0], dtype=torch.float32)
-        y = torch.tensor([0.0, 1.0], dtype=torch.float32)
+        # Define the filter bank object
+        self.G = from_matrices(self.group_elements)
 
-        # Define rotation matrices for 0°, 90°, 180°, 270°
-        def rotation_matrix(degrees):
-            theta = math.radians(degrees)
-            return torch.tensor([
-                [math.cos(theta), -math.sin(theta)],
-                [math.sin(theta),  math.cos(theta)]
-            ], dtype=torch.float32)
+        # Define templates (3 vectors in R^2)
+        self.templates = torch.tensor([
+            [1.0, 0.0],
+            [0.0, 1.0],
+            [1.0, 1.0]
+        ])
 
-        group = [rotation_matrix(a) for a in [0, 90, 180, 270]]
+        # Define input x ∈ R^2
+        self.x = torch.tensor([1.0, 2.0])
 
-        # Call the method from orbit2vec
-        result = self.model.max_inner_product(x, y, group)
+    def test_max_filter_output_shape(self):
+        max_filter_fn = self.G.max_filter(self.templates)
+        result = max_filter_fn(self.x)
+        self.assertEqual(result.shape, (3,))
 
-        # Expect the maximum inner product to be 1
-        self.assertAlmostEqual(result.item(), 1.0, places=5)
+    def test_max_filter_values(self):
+        max_filter_fn = self.G.max_filter(self.templates)
+        result = max_filter_fn(self.x)
+
+        # Manually compute expected max inner products
+        expected_values = []
+        for t in self.templates:
+            inner_products = [torch.dot(self.x, g @ t) for g in self.group_elements]
+            expected_values.append(torch.max(torch.stack(inner_products)))
+
+        expected_tensor = torch.stack(expected_values)
+        self.assertTrue(torch.allclose(result, expected_tensor, atol=1e-6))
 
 if __name__ == '__main__':
     unittest.main()
