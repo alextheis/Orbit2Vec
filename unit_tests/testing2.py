@@ -11,14 +11,31 @@ def rotation_matrix(theta):
         [sin(theta),  cos(theta)]
     ], dtype=torch.float32)
 
+# Helper to define reflection matrices
+def reflection_matrix(axis: str):
+    if axis == 'x':
+        return torch.tensor([[1, 0], [0, -1]], dtype=torch.float32)
+    elif axis == 'y':
+        return torch.tensor([[-1, 0], [0, 1]], dtype=torch.float32)
+    elif axis == 'main_diag':  # y = x
+        return torch.tensor([[0, 1], [1, 0]], dtype=torch.float32)
+    elif axis == 'other_diag':  # y = -x
+        return torch.tensor([[0, -1], [-1, 0]], dtype=torch.float32)
+    else:
+        raise ValueError(f"Unknown axis: {axis}")
+
 class TestFromMatrices(unittest.TestCase):
 
     def setUp(self):
-        # Define group elements (isometries)
-        self.identity = torch.eye(2)
-        self.rotation_90 = rotation_matrix(pi / 2)
-        self.reflection_x = torch.tensor([[1.0, 0.0], [0.0, -1.0]])
-        self.group_elements = [self.identity, self.rotation_90, self.reflection_x]
+        # Define full D4 group: 4 rotations and 4 reflections
+        rotations = [rotation_matrix(k * pi / 2) for k in range(4)]
+        reflections = [
+            reflection_matrix('x'),
+            reflection_matrix('y'),
+            reflection_matrix('main_diag'),
+            reflection_matrix('other_diag')
+        ]
+        self.group_elements = rotations + reflections
 
         # Define the filter bank object
         self.G = from_matrices(self.group_elements)
