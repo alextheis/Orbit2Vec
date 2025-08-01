@@ -6,17 +6,6 @@ class orbit2vec:
         #stores the distortion for each map that we have available
         self.distortion = {}
 
-    # def symsqrt(self, matrix):
-    #     """Compute the square root of a positive definite matrix."""
-    #     # perform the decomposition
-    #     # s, v = matrix.symeig(eigenvectors=True)
-    #     _, s, v = matrix.svd()  # passes torch.autograd.gradcheck()
-    #     # truncate small components
-    #     above_cutoff = s > s.max() * s.size(-1) * torch.finfo(s.dtype).eps
-    #     s = s[..., above_cutoff]
-    #     v = v[..., above_cutoff]
-    #     # compose the square root matrix
-    #     return (v * s.sqrt().unsqueeze(-2)) @ v.transpose(-2, -1)
     
     def matrix_sqrt_sym(self, matrix):
         """
