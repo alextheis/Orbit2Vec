@@ -4,7 +4,7 @@ import math
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from orbit2vec import orbit2vec
+from Code.orbit2vec import orbit2vec
 
 class TestMaps(unittest.TestCase):
     def setUp(self):

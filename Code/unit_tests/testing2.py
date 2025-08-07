@@ -11,8 +11,8 @@ if PROJECT_ROOT not in sys.path:
 import unittest
 import torch
 from math import pi, cos, sin
-from group import from_matrices
-from group import circular
+from Code.group import from_matrices
+from Code.group import circular
 
 
 # ----------------------------- helpers ---------------------------------
