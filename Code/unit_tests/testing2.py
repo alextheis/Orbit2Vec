@@ -2,6 +2,11 @@
 # file: testing2.py
 import os, sys
 
+import kagglehub
+
+# Download latest version
+path ="nswitzer/usa-2019-congressional-district-shape-files"
+
 # Make the project root (parent of this tests folder) importable
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, ".."))  # adjust if needed
@@ -13,7 +18,7 @@ import torch
 from math import pi, cos, sin
 from Code.group import from_matrices
 from Code.group import circular
-
+from Code.shape2matrix import shape2matrix
 
 # ----------------------------- helpers ---------------------------------
 
@@ -86,5 +91,21 @@ class TestCircular(unittest.TestCase):
 
         torch.testing.assert_close(result1, result2)
 
+class TestShape(unittest.TestCase):
+    #add stuff later
+    def test_import(self):
+        S = shape2matrix(50)
+        S.path = "nswitzer/usa-2019-congressional-district-shape-files"
+
+        sf = S.importShape()
+
+        res = S.extractShape(sf)
+
+        print(res[0])
+
+        print(S.equidistant(res)[0]) 
+
 if __name__ == '__main__':
     unittest.main()
+
+
