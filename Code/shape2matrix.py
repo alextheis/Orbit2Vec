@@ -35,6 +35,11 @@ class shape2matrix:
 
 
     def extractShape(self, reader):
+        """
+        We're going to read in our .shp files and return the borders of the polygons 
+        as a list of 2 x num_point matrices.
+
+        """
         sf = reader
         all_exteriors = []
 
@@ -44,10 +49,18 @@ class shape2matrix:
             # Only process Polygon shapes
             if shape.shapeType == shapefile.POLYGON and len(shape.parts) > 0:
                 start_index = shape.parts[0]
-                end_index = shape.parts[1] if len(shape.parts) > 1 else len(shape.points)
+
+                if len(shape.parts) > 1:
+                    end_index = shape.parts[1]
+                else:
+                    end_index = len(shape.points)
+
 
                 # Collect coordinates for the exterior ring (always as [x, y] lists)
-                exterior_ring = [[x, y] for x, y in shape.points[start_index:end_index]]
+                exterior_ring = []
+
+                for x, y in shape.points[start_index:end_index]:
+                    exterior_ring.append([x,y])
 
                 all_exteriors.append(exterior_ring)
 
@@ -58,12 +71,6 @@ class shape2matrix:
         For each polygon in polygon_data, generate num_point equidistant points along
         the exterior ring of the polygon and return them as a list of PyTorch tensors.
         
-        Args:
-            polygon_data: List of polygons, where each polygon is a list of [x, y] pairs
-                        representing the exterior ring.
-        
-        Returns:
-            List of torch.Tensor of shape (num_point, 2) for each polygon.
         """
         num_equidistant_points = self.num_point
         list_of_matrices = []
@@ -79,10 +86,10 @@ class shape2matrix:
             segment_length = perimeter_length / (num_equidistant_points - 1)
 
             # Generate equidistant points along the perimeter
-            equidistant_points = [
-                [line.interpolate(i * segment_length).x, line.interpolate(i * segment_length).y]
-                for i in range(num_equidistant_points)
-            ]
+            equidistant_points = []
+            for i in range(num_equidistant_points):
+
+                equidistant_points.append([line.interpolate(i * segment_length).x, line.interpolate(i * segment_length).y]) 
 
             # Convert to PyTorch tensor
             matrix = torch.tensor(equidistant_points, dtype=torch.float)
