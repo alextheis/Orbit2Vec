@@ -94,14 +94,14 @@ class TestCircular(unittest.TestCase):
 class TestShape(unittest.TestCase):
     #add stuff later
     def test_import(self):
-        S = shape2matrix(50)
+        S = shape2matrix(200)
         S.path = "nswitzer/usa-2019-congressional-district-shape-files"
 
         sf = S.importShape()
 
         res = S.extractShape(sf)
 
-        print(res[0])
+        # print(res[0])
 
         print(S.equidistant(res)[0]) 
 
