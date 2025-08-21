@@ -1,7 +1,7 @@
 Group module
 ============
 
-.. automodule:: Code.group
+.. automodule:: group
    :members:
    :undoc-members:
    :show-inheritance:

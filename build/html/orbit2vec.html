@@ -45,7 +45,21 @@
               <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="group.html">Group module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">orbit2vec module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">orbit2vec module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#orbit2vec.orbit2vec"><code class="docutils literal notranslate"><span class="pre">orbit2vec</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.matrix_sqrt_sym"><code class="docutils literal notranslate"><span class="pre">orbit2vec.matrix_sqrt_sym()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.map1"><code class="docutils literal notranslate"><span class="pre">orbit2vec.map1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.map2"><code class="docutils literal notranslate"><span class="pre">orbit2vec.map2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.map3"><code class="docutils literal notranslate"><span class="pre">orbit2vec.map3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.map4"><code class="docutils literal notranslate"><span class="pre">orbit2vec.map4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.max_inner_product"><code class="docutils literal notranslate"><span class="pre">orbit2vec.max_inner_product()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.get_distortion"><code class="docutils literal notranslate"><span class="pre">orbit2vec.get_distortion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.get_all_distortions"><code class="docutils literal notranslate"><span class="pre">orbit2vec.get_all_distortions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#orbit2vec.orbit2vec.clear_distortions"><code class="docutils literal notranslate"><span class="pre">orbit2vec.clear_distortions()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="shape2matrix.html">shape2matrix module</a></li>
 </ul>
 
@@ -73,8 +87,165 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="orbit2vec-module">
-<h1>orbit2vec module<a class="headerlink" href="#orbit2vec-module" title="Link to this heading"></a></h1>
+  <section id="module-orbit2vec">
+<span id="orbit2vec-module"></span><h1>orbit2vec module<a class="headerlink" href="#module-orbit2vec" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">orbit2vec.</span></span><span class="sig-name descname"><span class="pre">orbit2vec</span></span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.matrix_sqrt_sym">
+<span class="sig-name descname"><span class="pre">matrix_sqrt_sym</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.matrix_sqrt_sym"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.matrix_sqrt_sym" title="Link to this definition"></a></dt>
+<dd><p>Computes the symmetric square root of a real, symmetric positive definite matrix.
+Returns a matrix <cite>sqrtm</cite> such that: sqrtm &#64; sqrtm.T = matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>torch.Tensor</em>) – A symmetric, positive definite matrix of shape (n, n)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matrix square root of shape (n, n)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.map1">
+<span class="sig-name descname"><span class="pre">map1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.map1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.map1" title="Link to this definition"></a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> (<em>torch.Tensor</em>) – _description_</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.map2">
+<span class="sig-name descname"><span class="pre">map2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.map2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.map2" title="Link to this definition"></a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_list</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – _description_</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Union[int, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.map3">
+<span class="sig-name descname"><span class="pre">map3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.map3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.map3" title="Link to this definition"></a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>torch.Tensor</em>) – _description_</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.map4">
+<span class="sig-name descname"><span class="pre">map4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.map4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.map4" title="Link to this definition"></a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>torch.Tensor</em>) – _description_</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.max_inner_product">
+<span class="sig-name descname"><span class="pre">max_inner_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.max_inner_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.max_inner_product" title="Link to this definition"></a></dt>
+<dd><p>Compute max_{g ∈ G} ⟨x, g(y)⟩ where G is a group of isometries represented by matrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) – Tensor of shape (n,)</p></li>
+<li><p><strong>y</strong> (<em>torch.Tensor</em>) – Tensor of shape (n,)</p></li>
+<li><p><strong>group</strong> (<em>List</em><em>[</em><em>torch.Tensor</em><em>]</em>) – List of tensors, each of shape (n, n), representing isometries.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the maximum inner product.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Scalar tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.get_distortion">
+<span class="sig-name descname"><span class="pre">get_distortion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.get_distortion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.get_distortion" title="Link to this definition"></a></dt>
+<dd><p>Get the distortion value for a specific map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>map_name</strong> (<em>str</em>) – Name of the map to get distortion for</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Distortion value if map exists, None otherwise</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.get_all_distortions">
+<span class="sig-name descname"><span class="pre">get_all_distortions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.get_all_distortions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.get_all_distortions" title="Link to this definition"></a></dt>
+<dd><p>Get all stored distortion values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing all map distortions</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em>[str, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbit2vec.orbit2vec.clear_distortions">
+<span class="sig-name descname"><span class="pre">clear_distortions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/orbit2vec.html#orbit2vec.clear_distortions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbit2vec.orbit2vec.clear_distortions" title="Link to this definition"></a></dt>
+<dd><p>Clear all stored distortion values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

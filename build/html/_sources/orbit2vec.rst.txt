@@ -1,7 +1,7 @@
 orbit2vec module
 ================
 
-.. automodule:: Code.orbit2vec
+.. automodule:: orbit2vec
    :members:
    :undoc-members:
    :show-inheritance:

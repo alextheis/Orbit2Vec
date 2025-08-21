@@ -44,7 +44,24 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Group module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Group module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#group.Group"><code class="docutils literal notranslate"><span class="pre">Group</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#group.Group.max_filter"><code class="docutils literal notranslate"><span class="pre">Group.max_filter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#group.from_matrices"><code class="docutils literal notranslate"><span class="pre">from_matrices</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#group.from_matrices.max_filter"><code class="docutils literal notranslate"><span class="pre">from_matrices.max_filter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#group.circular"><code class="docutils literal notranslate"><span class="pre">circular</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#group.circular.reversal"><code class="docutils literal notranslate"><span class="pre">circular.reversal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#group.circular.fourier"><code class="docutils literal notranslate"><span class="pre">circular.fourier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#group.circular.inv_fourier"><code class="docutils literal notranslate"><span class="pre">circular.inv_fourier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#group.circular.max_filter"><code class="docutils literal notranslate"><span class="pre">circular.max_filter()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="orbit2vec.html">orbit2vec module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shape2matrix.html">shape2matrix module</a></li>
 </ul>
@@ -73,8 +90,127 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="group-module">
-<h1>Group module<a class="headerlink" href="#group-module" title="Link to this heading"></a></h1>
+  <section id="module-group">
+<span id="group-module"></span><h1>Group module<a class="headerlink" href="#module-group" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="group.Group">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">group.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><a class="reference internal" href="_modules/group.html#Group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.Group" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for mathematical groups used in Orbit2Vec.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="group.Group.max_filter">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/group.html#Group.max_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.Group.max_filter" title="Link to this definition"></a></dt>
+<dd><p>Return a group-specific max filter function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="group.from_matrices">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">group.</span></span><span class="sig-name descname"><span class="pre">from_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/group.html#from_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.from_matrices" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#group.Group" title="group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">Group</span></code></a></p>
+<p>Group generated from a collection of matrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matrices</strong> (<em>List</em><em>[</em><em>torch.Tensor</em><em>]</em>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="group.from_matrices.max_filter">
+<span class="sig-name descname"><span class="pre">max_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/group.html#from_matrices.max_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.from_matrices.max_filter" title="Link to this definition"></a></dt>
+<dd><p>Create a function that computes the max inner product between
+a given vector and transformed templates under the group action.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>template</strong> (<em>torch.Tensor</em>) – A template tensor of shape (m, n).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function that takes
+an input vector <code class="docutils literal notranslate"><span class="pre">x</span></code> and returns the max inner product over
+all group actions, for each row of the template.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Callable[[torch.Tensor], torch.Tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="group.circular">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">group.</span></span><span class="sig-name descname"><span class="pre">circular</span></span><a class="reference internal" href="_modules/group.html#circular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.circular" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#group.Group" title="group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">Group</span></code></a></p>
+<p>Circular group actions (rotations via Fourier methods).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="group.circular.reversal">
+<span class="sig-name descname"><span class="pre">reversal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/group.html#circular.reversal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.circular.reversal" title="Link to this definition"></a></dt>
+<dd><p>Reverse the entries of a vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> (<em>torch.Tensor</em>) – Input vector.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Reversed vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="group.circular.fourier">
+<span class="sig-name descname"><span class="pre">fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/group.html#circular.fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.circular.fourier" title="Link to this definition"></a></dt>
+<dd><p>Compute the discrete Fourier transform (DFT) of a vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> (<em>torch.Tensor</em>) – Input vector.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Complex Fourier coefficients.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="group.circular.inv_fourier">
+<span class="sig-name descname"><span class="pre">inv_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/group.html#circular.inv_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.circular.inv_fourier" title="Link to this definition"></a></dt>
+<dd><p>Compute the inverse discrete Fourier transform (IDFT).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> (<em>torch.Tensor</em>) – Complex Fourier coefficients.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Real vector after inverse transform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="group.circular.max_filter">
+<span class="sig-name descname"><span class="pre">max_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/group.html#circular.max_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#group.circular.max_filter" title="Link to this definition"></a></dt>
+<dd><p>Create a function that computes the maximum circular convolution
+between two vectors under the group action.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A function that takes two vectors <code class="docutils literal notranslate"><span class="pre">f</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span></code> and returns
+the maximum value of their circular correlation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Callable[[torch.Tensor, torch.Tensor], torch.Tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

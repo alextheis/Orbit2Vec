@@ -36,16 +36,25 @@ autodoc_mock_imports = [
     'shapely', 
     'shapefile',
     'kagglehub',
-    'numpy'  # if used
+    'numpy',
+    'abc'  # if used
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
 
-
+nitpick_ignore = [
+    ('py:class', 'torch.Tensor'),
+    ('py:class', 'Scalar tensor'),
+    ('py:class', 'shapefile.Reader'),
+    ('py:class', 'abc.ABC')
+]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+# Ensure ReadTheDocs can build the docs even if optional dependencies are missing
+nitpicky = True  # warn about all references that can't be found

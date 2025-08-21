@@ -1,7 +1,7 @@
 shape2matrix module
 ===================
 
-.. automodule:: Code.shape2matrix
+.. automodule:: shape2matrix
    :members:
    :undoc-members:
    :show-inheritance:
