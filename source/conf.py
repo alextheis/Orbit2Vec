@@ -2,7 +2,7 @@ import os
 import sys
 
 # Add the Code folder to sys.path
-sys.path.insert(0, os.path.abspath('../../Code'))
+sys.path.insert(0, os.path.abspath('../Code'))
 
 # Configuration file for the Sphinx documentation builder.
 #
