@@ -2,7 +2,7 @@ import os
 import sys
 
 # Add the Code folder to sys.path
-sys.path.insert(0, os.path.abspath('../Code'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -20,11 +20,15 @@ author = 'Alexander Theis, Brantley Vose, Dustin Mixon'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',  # Core extension to extract docstrings
-    'sphinx.ext.napoleon', # Allows Google/NumPy style docstrings
-    'sphinx.ext.todo', 'sphinx.ext.viewcode'
-
+    'sphinx.ext.autodoc',    # pull in docstrings
+    'sphinx.ext.napoleon',   # Google/NumPy docstring support
+    'sphinx.ext.viewcode',   # link to highlighted source
+    'sphinx.ext.autosummary' # optional: summary tables
 ]
+
+autosummary_generate = True          # build autosummary pages
+autodoc_typehints = 'description'    # show type hints in the docs body
+autodoc_member_order = 'bysource'    # keep member order as in source
 
 # Add after your extensions list
 autodoc_mock_imports = [
