@@ -26,6 +26,15 @@ extensions = [
 
 ]
 
+# Add after your extensions list
+autodoc_mock_imports = [
+    'torch',
+    'shapely', 
+    'shapefile',
+    'kagglehub',
+    'numpy'  # if used
+]
+
 templates_path = ['_templates']
 exclude_patterns = []
 
