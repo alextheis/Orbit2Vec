@@ -77,7 +77,6 @@ Contents
    :maxdepth: 2
    :caption: User Guide:
    
-   installation
    examples
    tutorials
 
