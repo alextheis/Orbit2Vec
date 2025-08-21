@@ -1,8 +1,6 @@
 shape2matrix module
 ===================
 
-The ``shape2matrix`` module provides functionality for converting shapefile data to PyTorch tensor matrices.
-
 .. automodule:: shape2matrix
    :members:
    :undoc-members:
@@ -15,7 +13,7 @@ Classes
    :members:
    :undoc-members:
    :show-inheritance:
-
+   
 Key Methods
 -----------
 
