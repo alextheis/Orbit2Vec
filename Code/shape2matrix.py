@@ -1,3 +1,4 @@
+from typing import List, Optional, Tuple, Union
 import shapefile
 from shapely.geometry import Polygon, LineString, Point
 from shapely.ops import transform # Optional, for reprojecting coordinates if needed
@@ -6,12 +7,25 @@ import kagglehub
 import os
 
 class shape2matrix:
-    def __init__(self, num):
+    def __init__(self, num: Optional[int] = None) -> None:
+        """_summary_
+
+        Args:
+            num (Optional[int], optional): _description_. Defaults to None.
+        """
         self.path = ""
         self.num_point = num if num else 50
 
 
-    def importShape(self):
+    def import_shape(self) -> shapefile.Reader:
+        """_summary_
+
+        Raises:
+            FileNotFoundError: _description_
+
+        Returns:
+            shapefile.Reader: _description_
+        """
         # Download dataset folder
         folder_path = kagglehub.dataset_download(
             self.path
@@ -34,12 +48,16 @@ class shape2matrix:
         return shapefile.Reader(shp_file)
 
 
-    def extractShape(self, reader):
-        """
-        We're going to read in our .shp files and return the borders of the polygons 
-        as a list of 2 x num_point matrices.
+    def extract_shape(self, reader: shapefile.Reader) -> List[List[List[float]]]:
+        """_summary_
 
+        Args:
+            reader (shapefile.Reader): _description_
+
+        Returns:
+            List[List[List[float]]]: _description_
         """
+    
         sf = reader
         all_exteriors = []
 
@@ -66,11 +84,14 @@ class shape2matrix:
 
         return all_exteriors
     
-    def equidistant(self, polygon_data):
-        """
-        For each polygon in polygon_data, generate num_point equidistant points along
-        the exterior ring of the polygon and return them as a list of PyTorch tensors.
-        
+    def equidistant(self, polygon_data: List[List[List[float]]]) -> List[torch.Tensor]:
+        """_summary_
+
+        Args:
+            polygon_data (List[List[List[float]]]): _description_
+
+        Returns:
+            List[torch.Tensor]: _description_
         """
         num_equidistant_points = self.num_point
         list_of_matrices = []

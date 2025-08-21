@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List, Callable, Union
 import torch
 
 class Group(ABC):
@@ -9,20 +10,24 @@ class Group(ABC):
 
 
 class from_matrices(Group):
-    def __init__(self, matrices):
-        self.group = matrices
-
-    def max_filter(self, template: torch.Tensor):
-        """
-        Returns a function computing max inner products between x and each g(template[i])
+    def __init__(self, matrices: List[torch.Tensor]) -> None:
+        """_summary_
 
         Args:
-            template: Tensor of shape (m, n) — m template vectors of size n
+            matrices (List[torch.Tensor]): _description_
+        """
+        self.group = matrices
+
+    def max_filter(self, template: torch.Tensor) -> Callable[[torch.Tensor], torch.Tensor]:
+        """_summary_
+
+        Args:
+            template (torch.Tensor): _description_
 
         Returns:
-            A function that takes x (Tensor of shape (n,)) and returns a tensor of shape (m,)
+            Callable[[torch.Tensor], torch.Tensor]: _description_
         """
-        def max_inner_product(x: torch.Tensor):
+        def max_inner_product(x: torch.Tensor) -> torch.Tensor:
             max_values = []
             for i in range(template.shape[0]):
                 t = template[i]  # (n,)
@@ -34,18 +39,47 @@ class from_matrices(Group):
         return max_inner_product
 
 class circular(Group):
-    def reversal(self, vec):
-         return torch.flip(vec, dims=(0,)) 
+    def reversal(self, vec: torch.Tensor) -> torch.Tensor:
+        """_summary_
 
-    def fourier(self, vec):
+        Args:
+            vec (torch.Tensor): _description_
+
+        Returns:
+            torch.Tensor: _description_
+        """
+        return torch.flip(vec, dims=(0,)) 
+
+    def fourier(self, vec: torch.Tensor) -> torch.Tensor:
+        """_summary_
+
+        Args:
+            vec (torch.Tensor): _description_
+
+        Returns:
+            torch.Tensor: _description_
+        """
         return torch.fft.fft(vec.to(torch.complex64))
 
-    def inv_fourier(self, vec):
+    def inv_fourier(self, vec: torch.Tensor) -> torch.Tensor:
+        """_summary_
+
+        Args:
+            vec (torch.Tensor): _description_
+
+        Returns:
+            torch.Tensor: _description_
+        """
         return torch.fft.ifft(vec)
 
-    def max_filter(self):
+    def max_filter(self) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
+        """_summary_
+
+        Returns:
+            Callable[[torch.Tensor, torch.Tensor], torch.Tensor]: _description_
+        """
         # Returns a function that computes max_{a in C_n} <f, Rg(a)>
-        def max_circ_conv(f: torch.tensor, g: torch.tensor):
+        def max_circ_conv(f: torch.Tensor, g: torch.Tensor) -> torch.Tensor:
 
             return max((self.inv_fourier(self.fourier(f) * self.fourier(self.reversal(g)))).real)  
           

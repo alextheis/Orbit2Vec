@@ -1,13 +1,16 @@
 import torch
 import math
+from typing import Dict, List, Union, Any
 
 class orbit2vec:
-    def __init__(self):
+    def __init__(self) -> None:
+        """_summary_
+        """
         #stores the distortion for each map that we have available
         self.distortion = {}
 
     
-    def matrix_sqrt_sym(self, matrix):
+    def matrix_sqrt_sym(self, matrix: torch.Tensor) -> torch.Tensor:
         """
         Computes the symmetric square root of a real, symmetric positive definite matrix.
         Returns a matrix `sqrtm` such that: sqrtm @ sqrtm.T = matrix
@@ -42,7 +45,15 @@ class orbit2vec:
         return sqrt_matrix
 
     #map1 function
-    def map1(self, vec):
+    def map1(self, vec: torch.Tensor) -> torch.Tensor:
+        """_summary_
+
+        Args:
+            vec (torch.Tensor): _description_
+
+        Returns:
+            torch.Tensor: _description_
+        """
         #set the distortion for our map1
         self.distortion["map1"] = math.sqrt(2)
 
@@ -53,23 +64,39 @@ class orbit2vec:
         return (1/norm) * gramian
     
     #map2 function
-    def map2(self, list):
+    def map2(self, input_list: List[Union[int, float]]) -> List[Union[int, float]]:
+        """_summary_
+
+        Args:
+            input_list (List[Union[int, float]]): _description_
+
+        Returns:
+            List[Union[int, float]]: _description_
+        """
         #sorts list
         list.sort()
         return list
     
-    def map3(self, matrix):
-        return self.matrix_sqrt_sym(matrix.t() @ matrix)
+    def map3(self, matrix: torch.Tensor) -> torch.Tensor:
+        """_summary_
 
-    # def map4(self, matrix):
-    #     # Instead of centering columns, make the matrix have zero trace
-    #     # This is invariant under similarity transformations
-    #     n = matrix.shape[0]
-    #     trace_centered = matrix - (matrix.trace() / n) * torch.eye(n)
-        
-    #     return self.map3(trace_centered)
+        Args:
+            matrix (torch.Tensor): _description_
+
+        Returns:
+            torch.Tensor: _description_
+        """
+        return self.matrix_sqrt_sym(matrix.t() @ matrix)
                     
-    def map4(self, matrix):
+    def map4(self, matrix: torch.Tensor) -> torch.Tensor:
+        """_summary_
+
+        Args:
+            matrix (torch.Tensor): _description_
+
+        Returns:
+            torch.Tensor: _description_
+        """
         num_columns = matrix.shape[1]
         column_length = matrix.shape[0]
         col_sum = torch.zeros(column_length, 1)
@@ -85,7 +112,7 @@ class orbit2vec:
 
         return self.map3(matrix)
 
-    def max_inner_product(self, x: torch.Tensor, y: torch.Tensor, group: list):
+    def max_inner_product(self, x: torch.Tensor, y: torch.Tensor, group: List[torch.Tensor]) -> torch.Tensor:
         """
         Compute max_{g ∈ G} ⟨x, g(y)⟩ where G is a group of isometries represented by matrices.
 
@@ -100,4 +127,25 @@ class orbit2vec:
         inner_products = [torch.dot(x, g @ y) for g in group]
         return torch.max(torch.stack(inner_products))
 
+    def get_distortion(self, map_name: str) -> Union[float, None]:
+        """Get the distortion value for a specific map.
+        
+        Args:
+            map_name: Name of the map to get distortion for
+            
+        Returns:
+            Distortion value if map exists, None otherwise
+        """
+        return self.distortion.get(map_name)
     
+    def get_all_distortions(self) -> Dict[str, float]:
+        """Get all stored distortion values.
+        
+        Returns:
+            Dictionary containing all map distortions
+        """
+        return self.distortion.copy()
+    
+    def clear_distortions(self) -> None:
+        """Clear all stored distortion values."""
+        self.distortion.clear()
