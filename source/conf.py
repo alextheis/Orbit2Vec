@@ -1,48 +1,37 @@
 import os
 import sys
 
-# Add the Code folder to sys.path
+# Add the Code folder to sys.path so Sphinx can import modules
 sys.path.insert(0, os.path.abspath('../Code'))
 
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
 # -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
 project = 'Orbit2Vec'
 copyright = '2025, Alexander Theis, Brantley Vose, Dustin Mixon'
 author = 'Alexander Theis, Brantley Vose, Dustin Mixon'
 
 # -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
 extensions = [
-    'sphinx.ext.autodoc',    # pull in docstrings
-    'sphinx.ext.napoleon',   # Google/NumPy docstring support
-    'sphinx.ext.viewcode',   # link to highlighted source
-    'sphinx.ext.autosummary' # optional: summary tables
+    'sphinx.ext.autodoc',       # pull in docstrings
+    'sphinx.ext.napoleon',      # Google/NumPy docstring support
+    'sphinx.ext.viewcode',      # link to highlighted source
+    'sphinx.ext.autosummary',   # generate summary tables
 ]
 
-autosummary_generate = True          # build autosummary pages
-autodoc_typehints = 'description'    # show type hints in the docs body
-autodoc_member_order = 'bysource'    # keep member order as in source
+autosummary_generate = True
+autodoc_typehints = 'description'
+autodoc_member_order = 'bysource'
 
-# Add after your extensions list
+# Mock heavy or external dependencies for RTD
 autodoc_mock_imports = [
     'torch',
-    'shapely', 
+    'shapely',
     'shapefile',
     'kagglehub',
     'numpy',
-    'abc'  # if used
+    'abc'
 ]
 
-templates_path = ['_templates']
-exclude_patterns = []
-
+# Ignore unresolved references to external classes
 nitpick_ignore = [
     ('py:class', 'torch.Tensor'),
     ('py:class', 'Scalar tensor'),
@@ -50,11 +39,9 @@ nitpick_ignore = [
     ('py:class', 'abc.ABC')
 ]
 
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+templates_path = ['_templates']
+exclude_patterns = []
 
+# -- Options for HTML output -------------------------------------------------
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-
-# Ensure ReadTheDocs can build the docs even if optional dependencies are missing
-nitpicky = True  # warn about all references that can't be found
