@@ -45,9 +45,9 @@ The library consists of three main modules:
    :toctree: generated/
    :template: module.rst
    
-   orbit2vec
-   group  
-   shape2matrix
+   Code.orbit2vec
+   Code.group  
+   Code.shape2matrix
 
 Core Classes
 ------------
@@ -56,11 +56,11 @@ Core Classes
    :toctree: generated/
    :nosignatures:
    
-   orbit2vec.Orbit2Vec
-   group.Group
-   group.FromMatrices
-   group.Circular
-   shape2matrix.Shape2Matrix
+   Code.orbit2vec.Orbit2Vec
+   Code.group.Group
+   Code.group.FromMatrices
+   Code.group.Circular
+   Code.shape2matrix.Shape2Matrix
 
 Contents
 ========
