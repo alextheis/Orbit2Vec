@@ -111,7 +111,7 @@ class shape2matrix:
             for i in range(num_equidistant_points):
 
                 equidistant_points.append([line.interpolate(i * segment_length).x, line.interpolate(i * segment_length).y]) 
-
+                equidistant_points.pop()
             # Convert to PyTorch tensor
             matrix = torch.tensor(equidistant_points, dtype=torch.float)
             list_of_matrices.append(matrix)

@@ -106,4 +106,43 @@ class circular(Group):
             return max((self.inv_fourier(self.fourier(f) * self.fourier(self.reversal(g)))).real)  
           
         return max_circ_conv
+    
+    # comment later
+    def rotate_tensor(self, t: list)-> torch.Tensor: 
 
+        q = dequeue(t)
+        q.rotate(1) 
+
+        return torch.Tensor(list(q))
+        
+    # comment later
+    def max_filter2(self) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
+
+        C = circular()
+        circ_conv = C.max_filter()
+
+        def max_circ_conv2(f: torch.Tensor, g: torch.Tensor, C: torch.Tensor) -> torch.Tensor:
+
+            max_sum = float('-inf')
+            a1, a2, b1, b2 = [], [], [], []
+
+            for i in range(len(f)):
+                a1.append(f[i][0])
+                b1.append(f[i][1])
+                a2.append(g[i][0])
+                b2.append(g[i][1])
+
+            a1, a2, b1, b2 = torch.Tensor(a1), torch.Tensor(a2), torch.Tensor(b1), torch.Tensor(b2)
+
+            b1, b2 = self.reversal(b1), self.reversal(b2)
+
+            for i in range(len(f)):
+
+                sum = (circ_conv(a1, b1) + circ_conv(a2, b2))
+                max_sum = max(max_sum, sum)
+
+                b1, b2 = self.rotate_tensor(b1), self.rotate_tensor(b2)
+
+            return max_sum
+        
+        return max_circ_conv2   
