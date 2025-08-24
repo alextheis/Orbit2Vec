@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Callable, Union
+from collections import deque
 import torch
 
 class Group(ABC):
