@@ -5,6 +5,10 @@ from shapely.ops import transform # Optional, for reprojecting coordinates if ne
 import torch
 import kagglehub
 import os
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import numpy as np
 
 class shape2matrix:
     def __init__(self, num: Optional[int] = None) -> None:
@@ -111,9 +115,72 @@ class shape2matrix:
             for i in range(num_equidistant_points):
 
                 equidistant_points.append([line.interpolate(i * segment_length).x, line.interpolate(i * segment_length).y]) 
-                equidistant_points.pop()
+
+            equidistant_points.pop()
             # Convert to PyTorch tensor
             matrix = torch.tensor(equidistant_points, dtype=torch.float)
             list_of_matrices.append(matrix)
 
         return list_of_matrices
+    
+    def pca(self, data: List[Union[torch.Tensor, np.ndarray, float, int]]) -> np.ndarray:
+        """
+        Performs Principal Component Analysis on vector data with visualization.
+
+        Converts input data (tensors or scalars) to a vector format, creates a 2D feature
+        matrix by pairing values with their indices, applies standardization and PCA, 
+        then generates comparison plots showing both original data and PCA transformation.
+
+        Args:
+            data: Input data as list of torch.Tensor scalars, numpy arrays, or scalar values
+
+        Returns:
+            numpy.ndarray: 2D array of shape (n, 2) containing PCA-transformed coordinates
+            in the first two principal components
+        """
+
+
+        # Convert data to vector format
+        if isinstance(data[0], torch.Tensor):
+            # Handle tensor scalars
+            vector = np.array([item.item() if item.dim() == 0 else item.numpy().flatten()[0] for item in data])
+        else:
+            # Handle regular scalars or arrays
+            vector = np.array([item if np.isscalar(item) else item.flatten()[0] for item in data])
+        
+        # Create 2D array for PCA: [value, index]
+        indices = np.arange(len(vector))
+        stacked = np.column_stack([vector, indices])
+        
+        # Standardize features
+        scaler = StandardScaler()
+        stacked_scaled = scaler.fit_transform(stacked)
+
+        # Apply PCA
+        pca = PCA(n_components=2)
+        stacked_pca = pca.fit_transform(stacked_scaled)
+
+        # Plot
+        plt.figure(figsize=(12, 4))
+        
+        # Original vector plot
+        plt.subplot(1, 2, 1)
+        plt.plot(vector, 'bo-', markersize=6)
+        plt.title("Filter Bank Outputs")
+        plt.xlabel("Shape Index")
+        plt.ylabel("Filter Response Value")
+        plt.grid(True, alpha=0.3)
+        
+        # PCA plot
+        plt.subplot(1, 2, 2)
+        scatter = plt.scatter(stacked_pca[:,0], stacked_pca[:,1], c=indices, cmap='viridis', s=50)
+        plt.xlabel(f"PC1 ({pca.explained_variance_ratio_[0]:.1%} variance)")
+        plt.ylabel(f"PC2 ({pca.explained_variance_ratio_[1]:.1%} variance)")
+        plt.title("PCA Space")
+        plt.colorbar(scatter, label='Shape Index')
+        plt.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.show()
+        
+        return stacked_pca

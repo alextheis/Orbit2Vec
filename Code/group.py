@@ -108,42 +108,56 @@ class circular(Group):
           
         return max_circ_conv
     
-    # comment later
-    def rotate_tensor(self, t: list)-> torch.Tensor: 
 
-        q = dequeue(t)
+    def rotate_tensor(self, t: list)-> torch.Tensor: 
+        """
+        Rotates a tensor by shifting all elements one position to the right.
+
+        Args:
+            t (list): Input list of numerical values to be rotated
+
+        Returns:
+            torch.Tensor: A new tensor with elements rotated one position clockwise
+        """
+        q = deque(t)
         q.rotate(1) 
 
         return torch.Tensor(list(q))
-        
-    # comment later
-    def max_filter2(self) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
+ 
+    def max_filter2D(self) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
+        """
+        Creates a maximum circular convolution filter for 2D tensor pairs.
 
+        Returns:
+            Callable[[torch.Tensor, torch.Tensor], torch.Tensor]: A function that computes 
+            the maximum value of summed circular convolutions between corresponding tensor 
+            components
+        """
         C = circular()
         circ_conv = C.max_filter()
 
-        def max_circ_conv2(f: torch.Tensor, g: torch.Tensor, C: torch.Tensor) -> torch.Tensor:
 
-            max_sum = float('-inf')
-            a1, a2, b1, b2 = [], [], [], []
+        def max_circ_conv2D(f: torch.Tensor, g: torch.Tensor) -> torch.Tensor:
+            """
+            Computes the maximum circular convolution between two 2D tensor pairs.
 
-            for i in range(len(f)):
-                a1.append(f[i][0])
-                b1.append(f[i][1])
-                a2.append(g[i][0])
-                b2.append(g[i][1])
+            Decomposes each input tensor into column vectors, performs circular convolution
+            on corresponding pairs, and returns the maximum value of their sum.
+
+            Args:
+                f (torch.Tensor): First 2D tensor to be decomposed into column vectors
+                g (torch.Tensor): Second 2D tensor to be decomposed into column vectors
+
+            Returns:
+                torch.Tensor: Maximum value from the sum of circular convolutions of 
+                corresponding column pairs
+            """
+            
+            a1, b1 = map(list, zip(*f))
+            a2, b2 = map(list, zip(*g))
 
             a1, a2, b1, b2 = torch.Tensor(a1), torch.Tensor(a2), torch.Tensor(b1), torch.Tensor(b2)
-
-            b1, b2 = self.reversal(b1), self.reversal(b2)
-
-            for i in range(len(f)):
-
-                sum = (circ_conv(a1, b1) + circ_conv(a2, b2))
-                max_sum = max(max_sum, sum)
-
-                b1, b2 = self.rotate_tensor(b1), self.rotate_tensor(b2)
-
-            return max_sum
+ 
+            return torch.max(circ_conv(a1, b1) + circ_conv(a2, b2)) # maxk(<a1, b1C^k> + <a2, b2C^k>)
         
-        return max_circ_conv2   
+        return max_circ_conv2D   

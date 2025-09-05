@@ -1,8 +1,9 @@
 # file: testing2.py
 # file: testing2.py
 import os, sys
-
+from Code.group import from_matrices, circular
 import kagglehub
+import numpy as np
 
 # Download latest version
 path ="nswitzer/usa-2019-congressional-district-shape-files"
@@ -97,14 +98,38 @@ class TestShape(unittest.TestCase):
         S = shape2matrix(200)
         S.path = "nswitzer/usa-2019-congressional-district-shape-files"
 
-        sf = S.importShape()
+        sf = S.import_shape()
 
-        res = S.extractShape(sf)
-
-        # print(res[0])
+        res = S.extract_shape(sf)
 
         print(S.equidistant(res)[0]) 
 
+class TestPca(unittest.TestCase):
+    S = shape2matrix(200)
+    S.path = "nswitzer/usa-2019-congressional-district-shape-files"
+
+    c = circular()
+
+    sf = S.import_shape()
+
+    res = S.extract_shape(sf)
+
+    shapes = S.equidistant(res)
+
+    filter_bank = c.max_filter2D()
+
+    num = len(shapes)
+    num_points = shapes[0].shape[0]  # e.g., 199
+    
+    templates = np.random.normal(loc=0, scale=1, size=(num, num_points, 2))
+    new_shapes = []
+
+    for i in range(num):
+        new_shapes.append(filter_bank(shapes[i], templates[i]))
+    
+    S.pca(new_shapes)
+    # pass shapes through max filter bank (max_filter2)
+    # run pca 
 if __name__ == '__main__':
     unittest.main()
 
