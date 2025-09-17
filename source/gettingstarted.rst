@@ -1,6 +1,4 @@
 Getting Started
 ================
 
-.. automodule:: orbit2vec
-   :members:
-   :undoc-members:
+hi. this is a test
