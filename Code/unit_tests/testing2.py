@@ -102,7 +102,7 @@ class TestShape(unittest.TestCase):
 
         res = S.extract_shape(sf)
 
-        print(S.equidistant(res)[0]) 
+        # print(S.equidistant(res)[0]) 
 
 class TestPca(unittest.TestCase):
     S = shape2matrix(200)
@@ -126,7 +126,7 @@ class TestPca(unittest.TestCase):
 
     for i in range(num):
         new_shapes.append(filter_bank(shapes[i], templates[i]))
-    
+    print(new_shapes)
     S.pca(new_shapes)
     # pass shapes through max filter bank (max_filter2)
     # run pca 

@@ -7,9 +7,11 @@ Welcome to the Orbit2Vec documentation! This project provides utilities for work
    :maxdepth: 2
    :caption: Contents:
 
+   gettingstarted
    group
    orbit2vec
    shape2matrix
+   
 
 Indices and tables
 ==================
