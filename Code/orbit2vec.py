@@ -74,8 +74,8 @@ class orbit2vec:
             List[Union[int, float]]: _description_
         """
         #sorts list
-        list.sort()
-        return list
+        input_list.sort()
+        return input_list
     
     def map3(self, matrix: torch.Tensor) -> torch.Tensor:
         """_summary_
