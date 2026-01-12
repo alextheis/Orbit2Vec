@@ -1,12 +1,13 @@
 # file: testing2.py
-# file: testing2.py
-import os, sys
-from Code.group import from_matrices, circular
+import matplotlib.pyplot as plt
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from group import from_matrices, circular
 import kagglehub
 import numpy as np
 
 # Download latest version
-path ="nswitzer/usa-2019-congressional-district-shape-files"
+mypath ="nswitzer/usa-2019-congressional-district-shape-files"
 
 # Make the project root (parent of this tests folder) importable
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -17,11 +18,8 @@ if PROJECT_ROOT not in sys.path:
 import unittest
 import torch
 from math import pi, cos, sin
-from Code.group import from_matrices
-from Code.group import circular
-from Code.shape2matrix import shape2matrix
+from shape2matrix import shape2matrix
 
-# ----------------------------- helpers ---------------------------------
 
 def rotation_matrix(theta):
     """2×2 rotation matrix for angle theta."""
@@ -31,7 +29,7 @@ def rotation_matrix(theta):
     ], dtype=torch.float32)
 
 
-# ----------------------------- tests for from_matrices -----------------
+
 
 class TestFromMatrices(unittest.TestCase):
 
@@ -96,41 +94,102 @@ class TestShape(unittest.TestCase):
     #add stuff later
     def test_import(self):
         S = shape2matrix(200)
-        S.path = "nswitzer/usa-2019-congressional-district-shape-files"
+        # S.path = "nswitzer/usa-2019-congressional-district-shape-files"
 
         sf = S.import_shape()
 
         res = S.extract_shape(sf)
 
         # print(S.equidistant(res)[0]) 
-
 class TestPca(unittest.TestCase):
-    S = shape2matrix(200)
-    S.path = "nswitzer/usa-2019-congressional-district-shape-files"
 
-    c = circular()
+    def test_tsne_with_area(self):
+        S = shape2matrix(200)
+        S.path = mypath
 
-    sf = S.import_shape()
+        c = circular()
+        sf = S.import_shape()
+        res = S.extract_shape(sf)
 
-    res = S.extract_shape(sf)
+        boundaries = S.equidistant(res)
+        shapes = S.center(boundaries)
 
-    shapes = S.equidistant(res)
+        filter_bank = c.max_filter2D()
 
-    filter_bank = c.max_filter2D()
+        templates = shapes[:2]
+        new_shapes = []
 
-    num = len(shapes)
-    num_points = shapes[0].shape[0]  # e.g., 199
-    
-    templates = np.random.normal(loc=0, scale=1, size=(num, num_points, 2))
-    new_shapes = []
+        for shape in shapes:
+            v = []
+            for t in templates:
+                v.append(filter_bank(shape, t))
+            new_shapes.append(v)
 
-    for i in range(num):
-        new_shapes.append(filter_bank(shapes[i], templates[i]))
-    print(new_shapes)
-    S.pca(new_shapes)
-    # pass shapes through max filter bank (max_filter2)
-    # run pca 
+        new_shapes = np.array(new_shapes, dtype=float)
+
+        areas = [S.shoelace_formula(b) for b in boundaries]
+        S.tsne(new_shapes, 42, 2, areas, "Area", outlines=boundaries, outline_scale=0.5)
+
+        perimeters = [S.compute_perimeter(b) for b in boundaries]
+        S.tsne(new_shapes, 43, 2, perimeters, "Perimeter", outlines=boundaries, outline_scale=0.5)
+
+        roundness = [S.roundness(b) for b in boundaries]
+        S.tsne(new_shapes, 44, 2, roundness, "roundness", outlines=boundaries, outline_scale=0.5)
+
+        diameters = S.compute_diameter(boundaries)
+        S.tsne(new_shapes, 45, 2, diameters, "Diameter", outlines=boundaries, outline_scale=0.5)
+
+# class TestPca(unittest.TestCase):
+#     S = shape2matrix(200)
+#     S.path = mypath
+
+#     c = circular()
+
+#     sf = S.import_shape()
+#     res = S.extract_shape(sf)          
+
+#     equid = S.equidistant(res)            
+#     boundaries = equid                    
+
+#     shapes = S.center(equid)           
+
+#     filter_bank = c.max_filter2D()
+
+#     num_points = shapes[0].shape[0]       # e.g., 199
+#     templates = np.random.normal(loc=0, scale=1, size=(199, num_points, 2))
+#     n_temp = S.center(templates)       
+
+#     templates = shapes[:2]
+
+#     new_shapes = []
+#     for i in range(len(shapes)):
+#         v = []
+#         for j in range(len(templates)):
+#             v.append(filter_bank(shapes[i], n_temp[j]))
+#         new_shapes.append(v)
+
+#     new_shapes = np.array(new_shapes, dtype=float)  # shape (N, D)
+
+#     # print("features shape:", new_shapes.shape)
+#     # print("boundaries[0] shape:", boundaries[0].shape)
+
+#     # S.pca(torch.tensor(new_shapes))
+
+#     areas = [S.shoelace_formula(b) for b in boundaries]
+#     S.tsne(new_shapes, 42, 2, areas, "Area", outlines=boundaries, outline_scale=0.5)
+
+#     # perimeters = S.compute_perimeter(boundaries)
+#     # S.tsne(new_shapes, 42, 2, perimeters, "Perimeter", outlines=boundaries, outline_scale=0.5)
+
+#     # diameters = S.compute_diameter(boundaries)
+#     # S.tsne(new_shapes, 42, 2, diameters, "Diameter", outlines=boundaries, outline_scale=0.5)
+
+#     # roundness = S.roundness(boundaries)
+#     # S.tsne(new_shapes, 42, 2, roundness, "roundness", outlines=boundaries, outline_scale=0.5)
+
 if __name__ == '__main__':
     unittest.main()
+
+
 
 

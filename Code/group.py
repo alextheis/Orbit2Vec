@@ -157,7 +157,10 @@ class circular(Group):
             a2, b2 = map(list, zip(*g))
 
             a1, a2, b1, b2 = torch.Tensor(a1), torch.Tensor(a2), torch.Tensor(b1), torch.Tensor(b2)
- 
-            return torch.max(circ_conv(a1, b1) + circ_conv(a2, b2)) # maxk(<a1, b1C^k> + <a2, b2C^k>)
+
+            # a1, b1 = f[:,0], f[:,1]
+            # print(torch.max(circ_conv(a1, b1) + circ_conv(a2, b2)))
+            return torch.max(circ_conv(a1, a2) + circ_conv(b1, b2)) # maxk(<a1, b1C^k> + <a2, b2C^k>)
+            
         
         return max_circ_conv2D   
