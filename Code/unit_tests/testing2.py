@@ -139,53 +139,7 @@ class TestPca(unittest.TestCase):
         diameters = S.compute_diameter(boundaries)
         S.tsne(new_shapes, 45, 2, diameters, "Diameter", outlines=boundaries, outline_scale=0.5)
 
-# class TestPca(unittest.TestCase):
-#     S = shape2matrix(200)
-#     S.path = mypath
 
-#     c = circular()
-
-#     sf = S.import_shape()
-#     res = S.extract_shape(sf)          
-
-#     equid = S.equidistant(res)            
-#     boundaries = equid                    
-
-#     shapes = S.center(equid)           
-
-#     filter_bank = c.max_filter2D()
-
-#     num_points = shapes[0].shape[0]       # e.g., 199
-#     templates = np.random.normal(loc=0, scale=1, size=(199, num_points, 2))
-#     n_temp = S.center(templates)       
-
-#     templates = shapes[:2]
-
-#     new_shapes = []
-#     for i in range(len(shapes)):
-#         v = []
-#         for j in range(len(templates)):
-#             v.append(filter_bank(shapes[i], n_temp[j]))
-#         new_shapes.append(v)
-
-#     new_shapes = np.array(new_shapes, dtype=float)  # shape (N, D)
-
-#     # print("features shape:", new_shapes.shape)
-#     # print("boundaries[0] shape:", boundaries[0].shape)
-
-#     # S.pca(torch.tensor(new_shapes))
-
-#     areas = [S.shoelace_formula(b) for b in boundaries]
-#     S.tsne(new_shapes, 42, 2, areas, "Area", outlines=boundaries, outline_scale=0.5)
-
-#     # perimeters = S.compute_perimeter(boundaries)
-#     # S.tsne(new_shapes, 42, 2, perimeters, "Perimeter", outlines=boundaries, outline_scale=0.5)
-
-#     # diameters = S.compute_diameter(boundaries)
-#     # S.tsne(new_shapes, 42, 2, diameters, "Diameter", outlines=boundaries, outline_scale=0.5)
-
-#     # roundness = S.roundness(boundaries)
-#     # S.tsne(new_shapes, 42, 2, roundness, "roundness", outlines=boundaries, outline_scale=0.5)
 
 if __name__ == '__main__':
     unittest.main()
